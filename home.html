@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currículo Interativo - Eliana Rank</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Visualization & Content Choices: 
+        - Contact Info: Header - Goal: Inform - Method: HTML text - Interaction: Clickable email/LinkedIn.
+        - Objective/Summary: 'Sobre' section - Goal: Inform - Method: HTML text.
+        - Experience: 'Experiência' section - Goal: Inform/Organize - Method: Vertical list of cards (HTML/Tailwind) and a Chart.js horizontal bar chart for duration. Interaction: Tab navigation.
+        - Education: 'Formação' section - Goal: Inform - Method: HTML card.
+        - Courses: 'Cursos' section - Goal: Inform - Method: HTML list/cards.
+        - Skills & Additional Info: 'Habilidades' section - Goal: Inform - Method: HTML lists.
+        - Justification: Chosen methods prioritize clarity, readability, and standard resume conventions, adapted for an interactive web format. Chart.js for visualizing experience duration.
+        - Library/Method: HTML, Tailwind CSS, Vanilla JS for navigation, Chart.js for chart.
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* bg-slate-50 */
+            color: #334155; /* text-slate-700 */
+        }
+        .nav-button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.3s, color 0.3s;
+            font-weight: 500;
+        }
+        .nav-button:hover {
+            background-color: #e2e8f0; /* bg-slate-200 */
+        }
+        .nav-button.active {
+            background-color: #0284c7; /* bg-sky-600 */
+            color: white;
+        }
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .content-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #ffffff;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="container mx-auto max-w-5xl p-4 sm:p-6 lg:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-sky-700">ELIANA RANK</h1>
+            <p class="text-xl text-slate-600 mt-1">Secretária Executiva</p>
+            <div class="mt-4 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-slate-600">
+                <span>📞 (47) 99622-0305</span>
+                <a href="mailto:rankeliana@outlook.com" class="hover:text-sky-600">📧 rankeliana@outlook.com</a>
+                <span>📍 Colonial, São Bento do Sul/SC</span>
+                <a href="https://www.linkedin.com/in/eliana-rank-312b65176/" target="_blank" rel="noopener noreferrer" class="hover:text-sky-600">🔗 LinkedIn</a>
+            </div>
+        </header>
+
+        <nav class="mb-8 p-2 bg-slate-100 rounded-lg shadow">
+            <ul class="flex flex-wrap justify-center gap-2">
+                <li><button class="nav-button active" data-target="sobre">Sobre Mim</button></li>
+                <li><button class="nav-button" data-target="experiencia">Experiência Profissional</button></li>
+                <li><button class="nav-button" data-target="formacao">Formação Acadêmica</button></li>
+                <li><button class="nav-button" data-target="cursos">Cursos Complementares</button></li>
+                <li><button class="nav-button" data-target="habilidades">Habilidades e Informações</button></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section id="sobre" class="content-section active bg-white p-6 rounded-lg shadow">
+                <h2 class="text-2xl font-semibold text-sky-700 mb-4">Sobre Mim</h2>
+                <p class="mb-6 text-slate-600">Esta seção apresenta um panorama da minha trajetória profissional, incluindo meu objetivo de carreira e um resumo das minhas principais qualificações e experiências.</p>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-slate-700 mb-2">Objetivo Profissional</h3>
+                    <p class="text-slate-600">Atuar como Secretária Executiva, utilizando minhas habilidades administrativas, organizacionais e de atendimento para contribuir com a eficiência operacional da empresa, garantindo suporte de excelência à equipe executiva.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-700 mb-2">Resumo de Qualificações</h3>
+                    <ul class="list-disc list-inside text-slate-600 space-y-1">
+                        <li>Profissional com 7 anos de experiência em áreas administrativas, atendimento e recursos humanos.</li>
+                        <li>Expertise em rotinas administrativas: emissão de notas fiscais, elaboração de relatórios, controle de documentos e organização de arquivos.</li>
+                        <li>Vivência em atendimento ao cliente (presencial, telefônico e online) e suporte a equipes.</li>
+                        <li>Conhecimentos avançados em Pacote Office (Excel, Word, PowerPoint) e sistemas de gestão.</li>
+                        <li>Formação em Psicologia, com habilidades em comunicação interpessoal e inteligência emocional.</li>
+                        <li>Cursos complementares em liderança, finanças pessoais, marketing pessoal e oratória.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="experiencia" class="content-section bg-white p-6 rounded-lg shadow">
+                <h2 class="text-2xl font-semibold text-sky-700 mb-4">Experiência Profissional</h2>
+                <p class="mb-6 text-slate-600">Aqui você encontrará um detalhamento das minhas vivências profissionais, com as empresas por onde passei, os cargos que ocupei e as responsabilidades que desempenhei em cada um. Explore a linha do tempo da minha carreira e as contribuições que fiz em cada função. Um gráfico abaixo ilustra a duração de cada experiência.</p>
+                
+                <div class="space-y-6 mb-8">
+                    <div class="p-4 border border-slate-200 rounded-md hover:shadow-lg transition-shadow">
+                        <h3 class="text-lg font-semibold text-slate-800">SOLO ENGENHARIA LTDA.</h3>
+                        <p class="text-sm text-slate-500 mb-1">Assistente de RH | 08/2024 – Atual</p>
+                        <ul class="list-disc list-inside text-slate-600 text-sm space-y-1">
+                            <li>Controle e conferência de registros de ponto dos colaboradores.</li>
+                            <li>Gestão de despesas de viagem e organização de documentação.</li>
+                            <li>Suporte na alimentação de pastas e arquivos digitais.</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 border border-slate-200 rounded-md hover:shadow-lg transition-shadow">
+                        <h3 class="text-lg font-semibold text-slate-800">SOLO ENGENHARIA LTDA.</h3>
+                        <p class="text-sm text-slate-500 mb-1">Recepcionista | 03/2024 – 07/2024</p>
+                        <ul class="list-disc list-inside text-slate-600 text-sm space-y-1">
+                            <li>Atendimento telefônico e presencial a clientes e fornecedores.</li>
+                            <li>Recebimento e entrega de pedidos.</li>
+                            <li>Auxílio em tarefas financeiras e departamento pessoal.</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 border border-slate-200 rounded-md hover:shadow-lg transition-shadow">
+                        <h3 class="text-lg font-semibold text-slate-800">ENNE MÓVEIS E UTILIDADES DOMÉSTICAS LTDA EPP</h3>
+                        <p class="text-sm text-slate-500 mb-1">Auxiliar Administrativo | 07/2020 – 04/2023</p>
+                        <ul class="list-disc list-inside text-slate-600 text-sm space-y-1">
+                            <li>Faturamento e emissão de notas fiscais.</li>
+                            <li>Controle de fechamento mensal e cobrança de clientes.</li>
+                            <li>Fechamento de caixa, cadastro de clientes e produtos.</li>
+                            <li>Atendimento presencial e online, arquivamento de documentos e pagamento de contas.</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 border border-slate-200 rounded-md hover:shadow-lg transition-shadow">
+                        <h3 class="text-lg font-semibold text-slate-800">MASTERFARMA FARMÁCIA OXFORD</h3>
+                        <p class="text-sm text-slate-500 mb-1">Atendente de Farmácia | 05/2019 – 02/2020</p>
+                        <ul class="list-disc list-inside text-slate-600 text-sm space-y-1">
+                            <li>Atendimento ao cliente em perfumaria e vendas de medicamentos.</li>
+                            <li>Organização de estoque e conferência de notas fiscais.</li>
+                            <li>Fechamento de caixa e apoio como correspondente bancário.</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 border border-slate-200 rounded-md hover:shadow-lg transition-shadow">
+                        <h3 class="text-lg font-semibold text-slate-800">CRAS – Centro de Referência de Assistência Social</h3>
+                        <p class="text-sm text-slate-500 mb-1">Recepcionista | 05/2014 – 08/2014</p>
+                        <ul class="list-disc list-inside text-slate-600 text-sm space-y-1">
+                            <li>Cadastro e atualização de usuários.</li>
+                            <li>Organização do ambiente e envio de e-mails institucionais.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-700 mb-3 text-center">Duração das Experiências (em meses)</h3>
+                    <div class="chart-container max-w-2xl h-[300px] sm:h-[350px] md:h-[400px]">
+                        <canvas id="experienceDurationChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section id="formacao" class="content-section bg-white p-6 rounded-lg shadow">
+                <h2 class="text-2xl font-semibold text-sky-700 mb-4">Formação Acadêmica</h2>
+                <p class="mb-6 text-slate-600">Minha formação acadêmica base, que me forneceu conhecimentos teóricos e práticos essenciais para minha carreira.</p>
+                <div class="p-4 border border-slate-200 rounded-md">
+                    <h3 class="text-lg font-semibold text-slate-800">Bacharelado em Psicologia</h3>
+                    <p class="text-slate-600">Universidade do Contestado (UnC)</p>
+                    <p class="text-sm text-slate-500">Concluído em 12/2018</p>
+                </div>
+            </section>
+
+            <section id="cursos" class="content-section bg-white p-6 rounded-lg shadow">
+                <h2 class="text-2xl font-semibold text-sky-700 mb-4">Cursos Complementares</h2>
+                <p class="mb-6 text-slate-600">Investimentos contínuos em desenvolvimento profissional através de cursos e certificações que complementam minha formação e experiência.</p>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="p-3 border border-slate-200 rounded-md">
+                        <h4 class="font-semibold text-slate-700">Jornada da Inteligência Profissional</h4>
+                        <p class="text-sm text-slate-500">PUC-RS (03/2023)</p>
+                    </div>
+                    <div class="p-3 border border-slate-200 rounded-md">
+                        <h4 class="font-semibold text-slate-700">Profissional Adaptável: Inteligência Emocional, Finanças Pessoais e Liderança</h4>
+                        <p class="text-sm text-slate-500">PUC-RS (08/2022)</p>
+                    </div>
+                    <div class="p-3 border border-slate-200 rounded-md">
+                        <h4 class="font-semibold text-slate-700">Marketing Pessoal</h4>
+                        <p class="text-sm text-slate-500">CEPED (04/2020)</p>
+                    </div>
+                    <div class="p-3 border border-slate-200 rounded-md">
+                        <h4 class="font-semibold text-slate-700">Auxiliar Bancário</h4>
+                        <p class="text-sm text-slate-500">Instituto Educacional Inove (03/2019)</p>
+                    </div>
+                    <div class="p-3 border border-slate-200 rounded-md">
+                        <h4 class="font-semibold text-slate-700">Técnicas de Apresentação e Oratória</h4>
+                        <p class="text-sm text-slate-500">ACISBS (02/2015)</p>
+                    </div>
+                    <div class="p-3 border border-slate-200 rounded-md">
+                        <h4 class="font-semibold text-slate-700">Auxiliar Administrativo</h4>
+                        <p class="text-sm text-slate-500">SENAC (08/2012)</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="habilidades" class="content-section bg-white p-6 rounded-lg shadow">
+                <h2 class="text-2xl font-semibold text-sky-700 mb-4">Habilidades e Informações Adicionais</h2>
+                <p class="mb-6 text-slate-600">Um resumo das minhas principais competências técnicas e interpessoais, além de informações relevantes sobre minha disponibilidade e aptidões.</p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-700 mb-2">Habilidades Técnicas</h3>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li>Pacote Office (Excel, Word, PowerPoint)</li>
+                            <li>Sistemas de gestão</li>
+                            <li>Rotinas administrativas</li>
+                            <li>Emissão de notas fiscais</li>
+                            <li>Controle de documentos</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-700 mb-2">Habilidades Interpessoais</h3>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li>Comunicação interpessoal</li>
+                            <li>Inteligência emocional</li>
+                            <li>Organização</li>
+                            <li>Multitarefas</li>
+                            <li>Trabalho sob pressão</li>
+                            <li>Atendimento ao cliente</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-700 mb-2">Idiomas</h3>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li>Inglês básico</li>
+                        </ul>
+                    </div>
+                     <div>
+                        <h3 class="text-xl font-semibold text-slate-700 mb-2">Informações Adicionais</h3>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li>Disponibilidade para viagens, se necessário.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center mt-12 py-4 border-t border-slate-200">
+            <p class="text-sm text-slate-500">&copy; <span id="currentYear"></span> Eliana Rank. Currículo Interativo.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navButtons = document.querySelectorAll('.nav-button');
+            const contentSections = document.querySelectorAll('.content-section');
+            const currentYearSpan = document.getElementById('currentYear');
+
+            if (currentYearSpan) {
+                currentYearSpan.textContent = new Date().getFullYear();
+            }
+
+            function setActiveTab(targetId) {
+                navButtons.forEach(button => {
+                    button.classList.toggle('active', button.dataset.target === targetId);
+                });
+                contentSections.forEach(section => {
+                    section.classList.toggle('active', section.id === targetId);
+                });
+            }
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    setActiveTab(button.dataset.target);
+                });
+            });
+
+            // Initialize with the first tab active
+            if (navButtons.length > 0) {
+                setActiveTab(navButtons[0].dataset.target);
+            }
+
+            // Chart.js for Experience Duration
+            const experienceData = [
+                { label: 'SOLO - Assist. RH', duration: 10, details: '08/2024 – Atual (Maio 2025)' }, // Aug 2024 to May 2025 = 10 months
+                { label: 'SOLO - Recep.', duration: 5, details: '03/2024 – 07/2024' }, // 5 months
+                { label: 'ENNE - Aux. Adm.', duration: 34, details: '07/2020 – 04/2023' }, // 2 years 10 months = 34 months
+                { label: 'MASTERFARMA - At.', duration: 10, details: '05/2019 – 02/2020' }, // 10 months
+                { label: 'CRAS - Recep.', duration: 4, details: '05/2014 – 08/2014' } // 4 months
+            ];
+
+            const experienceDurationCtx = document.getElementById('experienceDurationChart');
+            if (experienceDurationCtx) {
+                new Chart(experienceDurationCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: experienceData.map(item => {
+                            // Ensure labels are not too long
+                            if (item.label.length > 16) {
+                                // Basic truncation, can be improved
+                                const parts = item.label.split(' - ');
+                                if (parts.length > 1 && parts[0].length + parts[1].length > 15) {
+                                     return parts[0].substring(0, Math.min(parts[0].length, 7)) + ".. - " + parts[1].substring(0, Math.min(parts[1].length, 6)) + "..";
+                                }
+                                return item.label.substring(0, 15) + '...';
+                            }
+                            return item.label;
+                        }),
+                        datasets: [{
+                            label: 'Duração (meses)',
+                            data: experienceData.map(item => item.duration),
+                            backgroundColor: 'rgba(2, 132, 199, 0.7)', // sky-600 with opacity
+                            borderColor: 'rgba(2, 132, 199, 1)', // sky-600
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Meses'
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    autoSkip: false, // Ensure all labels are shown
+                                     font: {
+                                        size: 10 // Smaller font for y-axis labels if needed
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.x !== null) {
+                                            label += context.parsed.x + ' meses';
+                                        }
+                                        const originalItem = experienceData[context.dataIndex];
+                                        if (originalItem && originalItem.details) {
+                                             // Add original label and details to tooltip
+                                            return [originalItem.label + ": " + context.parsed.x + ' meses', '(' + originalItem.details + ')'];
+                                        }
+                                        return label;
+                                    }
+                                }
+                            },
+                            legend: {
+                                display: false // Hiding legend as it's a single dataset
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
